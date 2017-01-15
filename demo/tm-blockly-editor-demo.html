@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+  <head>
+    <title>tm-blockly demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <link rel="import" href="../tm-blockly-editor.html">
+
+    <link rel="import" href="../bower_components/tm-blockly-workbench/tm-blockly-workbench.html">
+    <link rel="import" href="../bower_components/tm-html-preview/tm-html-preview.html">
+
+    <link rel="stylesheet" href="../codemirror/lib/codemirror.css">
+    <script src="../codemirror/lib/codemirror.js"></script>
+    <script src="../codemirror/lib/util/formatting.js"></script>
+    <script src="../codemirror/mode/css/css.js"></script>
+    <script src="../codemirror/mode/xml/xml.js"></script>
+    <script src="../codemirror/mode/javascript/javascript.js"></script>
+    <script src="../codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <!-- <link rel="stylesheet" href="../codemirror/doc/docs.css"> -->
+
+    <style is="custom-style" include="demo-pages-shared-styles"></style>
+    <style>
+      .wrapper {
+        display:inline-block;
+        width:100%;
+        height:800px;
+        //border:solid red 3px;
+        box-sizing: border-box;
+      }
+
+      .workbench {
+        display:inline-block;
+        box-sizing: border-box;
+        //border:solid red 2px;
+        width:50%;
+        height:100%;
+      }
+      .code {
+        display:inline-block;
+        box-sizing: border-box;
+        //border:solid green 2px;
+        width:24%;
+        height:100%;
+      }
+      .preview {
+        display:inline-block;
+        //border:solid blue 2px;
+        width:24%;
+        height:800px;
+      }
+      tm-blockly-workbench {
+        display:inline-block;
+        box-sizing: border-box;
+        width:100%;
+        height:100%;
+      }
+      tm-html-preview {
+        display:inline-block;
+        box-sizing: border-box;
+        width:100%;
+        height:100%;
+      }
+      .CodeMirror {
+        display:inline-block;
+        box-sizing: border-box;
+        border:solid blue 2px;
+        width:100%;
+        height:100%;
+      }
+      .CodeMirror-scroll,.CodeMirror-scrollbar {
+        height:100%;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h3>
+      tm-blockly-editor Demo
+      <button onclick="go()">GO</button>
+    </h3>
+
+    <div class="wrapper">
+      <div class="workbench">
+        <tm-blockly-workbench id="workbench">
+          <xml class="toolbox" style="display: none">
+            <category name="Controls">
+              <block type="controls_if"></block>
+              <block type="logic_compare"></block>
+              <block type="controls_repeat_ext"></block>
+            </category>
+            <category name="Maths">
+              <block type="math_number"></block>
+              <block type="math_arithmetic"></block>
+            </category>
+            <category name="Text">
+              <block type="text"></block>
+              <block type="text_print"></block>
+            </category>
+            <category name="Values">
+              <block type="text"></block>
+              <block type="math_number"></block>
+              <block type="text_join"></block>
+            </category>
+            <category name="HTML">
+              <category name="Structure">
+                <block type="tm_html"></block>
+                <block type="tm_head"></block>
+                <block type="tm_body"></block>
+                <block type="tm_script"></block>
+                <block type="tm_style"></block>
+                <block type="tm_link"></block>
+                <block type="tm_meta"></block>
+              </category>
+              <category name="Input">
+                <block type="tm_textfield"></block>
+                <block type="tm_textarea"></block>
+                <block type="tm_button"></block>
+                <block type="tm_checkbox"></block>
+                <block type="tm_radio"></block>
+                <block type="tm_select"></block>
+                <block type="tm_option"></block>
+              </category>
+              <category name="Containers">
+                <block type="tm_div"></block>
+                <block type="tm_span"></block>
+                <block type="tm_fieldset"></block>
+                <block type="tm_legend"></block>
+              </category>
+            </category>
+            <category name="CSS">
+              <block type="tm_css_block"></block>
+            </category>
+            <category name="JavaScript">
+              <block type="text_print"></block>
+              <block type="controls_if"></block>
+              <block type="logic_compare"></block>
+              <block type="controls_repeat_ext"></block>
+              <block type="math_arithmetic"></block>
+            </category>
+          </xml>
+        </tm-blockly-workbench>
+      </div>
+      <div class="code">
+        <textarea id="code" name="code" class="preview">
+          <html><head>
+          <script> function (s,e){ for(var i=0; i < 1; i++) test("test();a=1");} </script>
+          <script>
+          function test(c){  for (var i = 0; i < 10; i++){	          process("a.b();c = null;", 300);}
+          }
+          </script>
+          <table><tr><td>test 1</td></tr><tr><td>test 2</td></tr></table>
+          <script> function test() { return 1;} </script>
+          <style> .test { font-size: medium; font-family: monospace; }
+          </style>
+          </head>
+
+          <body>
+              <h2>Heading</h2>
+          </body>
+          </html>
+        </textarea>
+      </div>
+      <div class="preview">
+        <tm-html-preview id="preview">
+        </tm-html-preview>
+      </div>
+    </div>
+
+    <script>
+      var editor2 = CodeMirror.fromTextArea(document.getElementById("code"), {lineNumbers: true,mode: "htmlmixed"});
+      CodeMirror.commands["selectAll"](editor2);
+      editor2.autoFormatRange(editor2.getCursor(true), editor2.getCursor(false));
+
+      function go() {
+        const workbench = document.getElementById('workbench');
+        const editor = document.getElementById('editor');
+        const preview = document.getElementById('preview');
+        var code = workbench.getCode();
+        try {
+          document.getElementById('code').innerHTML = code;
+          editor2.setValue(code);
+          CodeMirror.commands["selectAll"](editor2);
+          editor2.autoFormatRange(editor2.getCursor(true), editor2.getCursor(false));
+          preview.setCode(code);
+        } catch (e) {
+          alert(e);
+        }
+      }
+    </script>
+  </body>
+</html>

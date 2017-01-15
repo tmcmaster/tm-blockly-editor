@@ -3,7 +3,12 @@
   "description": "Polymer web component for using blockly blocks to edit code.",
   "main": "tm-blockly-editor.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "tm-ace-editor": "tmcmaster/tm-ace-editor",
+    "tm-blockly-workbench": "tmcmaster/tm-blockly-workbench#master",
+    "tm-html-preview": "tmcmaster/tm-html-preview",
+    "iron-swipeable-pages": "^1.2.6",
+    "paper-code-mirror": "AKHXtern/paper-code-mirror"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
